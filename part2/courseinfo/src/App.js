@@ -73,5 +73,3 @@ const App = () => {
 };
 
 export default App;
-
-// must work regardless of the number of parts a course has
