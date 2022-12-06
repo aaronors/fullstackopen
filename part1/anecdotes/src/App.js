@@ -26,19 +26,30 @@ const App = () => {
         setSelected(getRandomInt(anecdotes.length))
     }
 
-    const addVoteToSelected = ()=> {
+    const addVoteToSelected = () => {
         const votesCopy = [...votes]
         votesCopy[selected] += 1;
 
         setVotes(votesCopy);
     }
 
+    let maxPos = 0;
+    for(let n = 0; n < votes.length; n++){
+        if(votes[n] > votes[maxPos]) maxPos = n;
+    }
+
     return (
         <>
+            <h1>Anecdote of the day</h1>
             <div>{anecdotes[selected]}</div>
             <div>has {votes[selected]} votes</div>
             <Button handleClick={addVoteToSelected} text='vote'/>
             <Button handleClick={getNextAnecdote} text='next anecdote'/>
+
+            <h1>Anecdote with most votes</h1>
+
+            <div>{anecdotes[maxPos]}</div>
+            <div>has {votes[maxPos]} votes</div>
         </>
     )
 }
