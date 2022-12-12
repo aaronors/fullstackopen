@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const App = () => {
     const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
-    const [newName, setNewName] = useState(""); // controlls for input element
+    const [newName, setNewName] = useState("");
 
     const addPerson = (event) => {
         event.preventDefault();
