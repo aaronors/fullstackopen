@@ -33,13 +33,4 @@ function App() {
 }
 
 export default App;
-// over 10 countries returned -> show "Too many matches, specify another filter"
-// 10 or fewer countries -> show countries 
-// only one country matching query -> show basic data 
-
-
-//what to do
-// 1. hook up react app so that it retrieves and shows countries
-// 2. implement conditional rendering if too many matches
-// 3. implement coniditonal rendering if one country
 
