@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import './App.css';
+import CountryDisplay from "./components/CountryDisplay";
 
 function App() {
     const [filter, setNewFilter] = useState("");
@@ -16,6 +17,7 @@ function App() {
 
     const filteredEntries = allCountries.filter(country => country.name.common.toLowerCase().includes(filter.toLowerCase()));
 
+
     const handleFilterChange = (event) =>{
         setNewFilter(event.target.value);
     }    
@@ -25,9 +27,7 @@ function App() {
             <div>
                 find countries <input value={filter} onChange={handleFilterChange} />
             </div>
-            <ul>
-                {filteredEntries.map((country) => (<li key={country.name.common}> {country.name.common} </li>))}
-            </ul>
+            <CountryDisplay countries={filteredEntries}/>
         </>
     );
 }
