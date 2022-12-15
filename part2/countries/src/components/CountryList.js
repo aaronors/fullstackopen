@@ -16,6 +16,3 @@ const CountryList = ({countries, setNewFilter}) => {
     );
 };
 export default CountryList;
-
-// need to reload the page so that Country is shown 
-// on button click -> set filter to value of button
