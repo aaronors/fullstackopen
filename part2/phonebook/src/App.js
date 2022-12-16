@@ -43,6 +43,10 @@ const App = () => {
                         setNewNumber("");
                         displayNotification(`Added ${returnedPerson.name}`, "success")
                     })
+                    .catch((error) => {
+                        displayNotification(`Information of ${changedPerson.name} has already been removed from the server`, "error")
+                        setPersons(persons.filter((p) => p.id !== changedPerson.id));
+                    });
             }
         }else{
             const personObject = {
