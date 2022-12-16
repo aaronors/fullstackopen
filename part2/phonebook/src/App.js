@@ -16,15 +16,24 @@ const App = () => {
         personService.getAll().then((personList) => {
             setPersons(personList);
         });
-    }, []);
+    }, [persons]);
 
     const filteredEntries = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()));
 
     const addPerson = (event) => {
         event.preventDefault();
+        let foundPerson = persons.find((person) => person.name.localeCompare(newName, undefined, { sensitivity: 'accent' }) === 0 )
 
-        if(persons.find((person) => person.name.localeCompare(newName, undefined, { sensitivity: 'accent' }) === 0 )){
-            alert(`${newName} is already added to phonebook`);
+        if(foundPerson !== undefined){
+            if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one`)){
+                const changedPerson = { ...foundPerson, number: newNumber };     
+                personService.update(changedPerson.id, changedPerson)
+                    .then((returnedPerson) => {
+                        setPersons(persons.map((person) => person.id !== changedPerson.Id ? person : returnedPerson));
+                        setNewName("");
+                        setNewNumber("");
+                    })
+            }
         }else{
             const personObject = {
                 name: newName,
