@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import Notification from "./components/Notification";
 import personService from "./services/persons";
 
 import "./App.css";
@@ -11,6 +12,8 @@ const App = () => {
     const [newName, setNewName] = useState("");
     const [newNumber, setNewNumber] = useState("");
     const [filter, setNewFilter] = useState("");
+    const [notification, setNotification] = useState(null);
+    const [notificationType, setNotificationType] = useState(null);
 
     useEffect(() => {
         personService.getAll().then((personList) => {
@@ -19,6 +22,12 @@ const App = () => {
     }, []);
 
     const filteredEntries = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()));
+
+    const displayNotification = (msg, type) => {
+        setNotification(msg);
+        setNotificationType(type);
+        setTimeout(() => {setNotification(null)}, 5000);
+    }
 
     const addPerson = (event) => {
         event.preventDefault();
@@ -32,6 +41,7 @@ const App = () => {
                         setPersons(persons.map((person) => person.id !== returnedPerson.id ? person : returnedPerson));
                         setNewName("");
                         setNewNumber("");
+                        displayNotification(`Added ${returnedPerson.name}`, "success")
                     })
             }
         }else{
@@ -44,6 +54,7 @@ const App = () => {
                 setPersons(persons.concat(returnedPerson));
                 setNewName("");
                 setNewNumber("");
+                displayNotification(`Added ${returnedPerson.name}`, "success")
             });
         }
     };
@@ -62,6 +73,7 @@ const App = () => {
 
     return (
         <div>
+            <Notification message={notification} notificationType={notificationType}/>
             <h2>Phonebook</h2>
                 <Filter value={filter} onChange={handleFilterChange} />
             <h2>Add New</h2>
