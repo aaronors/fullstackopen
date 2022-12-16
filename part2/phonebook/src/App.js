@@ -64,7 +64,7 @@ const App = () => {
                 numberHandler={handleNumberChange}
             />
             <h2>Numbers</h2>
-            <Persons filteredEntries={filteredEntries}/>
+            <Persons filteredEntries={filteredEntries} persons={persons} setPersons={setPersons}/>
         </div>
     );
 };
