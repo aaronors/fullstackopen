@@ -16,7 +16,7 @@ const App = () => {
         personService.getAll().then((personList) => {
             setPersons(personList);
         });
-    }, [persons]);
+    }, []);
 
     const filteredEntries = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()));
 
@@ -29,7 +29,7 @@ const App = () => {
                 const changedPerson = { ...foundPerson, number: newNumber };     
                 personService.update(changedPerson.id, changedPerson)
                     .then((returnedPerson) => {
-                        setPersons(persons.map((person) => person.id !== changedPerson.Id ? person : returnedPerson));
+                        setPersons(persons.map((person) => person.id !== returnedPerson.id ? person : returnedPerson));
                         setNewName("");
                         setNewNumber("");
                     })
