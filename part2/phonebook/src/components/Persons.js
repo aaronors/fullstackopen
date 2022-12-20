@@ -4,10 +4,10 @@ const Persons = ({filteredEntries, persons, setPersons}) => {
 
     const handleDelete = (event) => {
         const selectedId = event.target.value;
-        const selectedPerson = filteredEntries.find((person) => (person.id === parseInt(selectedId)))
+        const selectedPerson = filteredEntries.find((person) => (person.id === selectedId))
         if(window.confirm(`Delete ${selectedPerson.name}`)){
             personService.deletePerson(selectedId).then(
-                setPersons(persons.filter((person) => person.id !== parseInt(selectedId)))
+                setPersons(persons.filter((person) => person.id !== selectedId))
             );
         }
     }
