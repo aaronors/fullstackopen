@@ -54,12 +54,16 @@ const App = () => {
                 number: newNumber
             };
             
-            personService.create(personObject).then((returnedPerson) => {
-                setPersons(persons.concat(returnedPerson));
-                setNewName("");
-                setNewNumber("");
-                displayNotification(`Added ${returnedPerson.name}`, "success")
-            });
+            personService
+                .create(personObject).then((returnedPerson) => {
+                    setPersons(persons.concat(returnedPerson));
+                    setNewName("");
+                    setNewNumber("");
+                    displayNotification(`Added ${returnedPerson.name}`, "success")
+                })
+                .catch((error) => {
+                    displayNotification(error.response.data.error, "error")
+                });
         }
     };
 
