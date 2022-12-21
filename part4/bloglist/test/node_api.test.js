@@ -63,6 +63,26 @@ test("a valid blog can be added", async () => {
     expect(contents).toContain("newly inserted blog");
 });
 
+test("a blog can be added with no likes", async () => {
+    const newBlog = {
+        title: "newly inserted blog",
+        author: "test",
+        url: "test.com"
+    };
+
+    await api
+        .post("/api/blogs")
+        .send(newBlog)
+        .expect(201)
+        .expect("Content-Type", /application\/json/);
+
+    const insertedBlogs = await helper.blogsInDb();
+    expect(insertedBlogs).toHaveLength(helper.initialBlogs.length + 1);
+
+    const contents = insertedBlogs.map((b) => b.likes);
+    expect(contents).toContain(0);
+});
+
 afterAll(() => {
     mongoose.connection.close();
 });
