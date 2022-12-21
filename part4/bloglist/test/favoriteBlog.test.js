@@ -1,6 +1,6 @@
-const totalLikes = require("../utils/list_helper").totalLikes;
+const favoriteBlog = require("../utils/list_helper").favoriteBlog;
 
-describe("total likes", () => {
+describe("favorite blog", () => {
     const listWithOneBlog = [
         {
             _id: "1",
@@ -31,16 +31,16 @@ describe("total likes", () => {
         }
     ];
 
-    test("totalLikes test with no objects", () => {
-        expect(totalLikes([])).toBe(0);
+    test("favoriteBlog test with no objects", () => {
+        expect(favoriteBlog([])).toBe(null);
     });
 
-    test("totalLikes test with one object", () => {
-        expect(totalLikes(listWithOneBlog)).toBe(5);
+    test("favoriteBlog test with one object", () => {
+        expect(favoriteBlog(listWithOneBlog)).toEqual(listWithOneBlog[0]);
     });
 
-    test("totalLikes test with multiple objects", () => {
-        expect(totalLikes(listWithMultipleBlogs)).toBe(15);
+    test("favoriteBlog test with multiple objects", () => {
+        expect(favoriteBlog(listWithMultipleBlogs)).toEqual(listWithMultipleBlogs[1]);
     });
 
 });
