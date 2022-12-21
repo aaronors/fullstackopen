@@ -20,7 +20,6 @@ const favoriteBlog = (blogs) => {
     }
 
     return (pos != null) ? blogs[pos] : null; 
-    //return pos;
 };
 
 module.exports = {
