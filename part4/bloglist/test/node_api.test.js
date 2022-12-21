@@ -83,6 +83,32 @@ test("a blog can be added with no likes", async () => {
     expect(contents).toContain(0);
 });
 
+test("throw error if title is missing", async () => {
+    const newBlog = {
+        author: "test",
+        url: "test.com"
+    };
+
+    await api.post("/api/blogs").send(newBlog).expect(400)
+
+    const insertedBlogs = await helper.blogsInDb();
+
+    expect(insertedBlogs).toHaveLength(helper.initialBlogs.length);
+});
+
+test("throw error if url is missing", async () => {
+    const newBlog = {
+        title: "newly inserted blog",
+        author: "test"
+    };
+
+    await api.post("/api/blogs").send(newBlog).expect(400)
+
+    const insertedBlogs = await helper.blogsInDb();
+
+    expect(insertedBlogs).toHaveLength(helper.initialBlogs.length);
+});
+
 afterAll(() => {
     mongoose.connection.close();
 });
