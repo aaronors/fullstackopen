@@ -3,3 +3,4 @@ part2/countries/.env
 part2/phonebook/db.json
 part4/bloglist/.env
 part4/bloglist/node_modules
+part5/bloglist-frontend/node_modules
