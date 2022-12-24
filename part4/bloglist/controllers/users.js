@@ -15,6 +15,10 @@ usersRouter.post("/", async (request, response) => {
         return response.status(400).json({
             error: "username must be unique",
         });
+    }else if(!password || password.length < 3){
+        return response.status(400).json({
+            error: "password must be atleast three character long",
+        });
     }
 
     const saltRounds = 10;
