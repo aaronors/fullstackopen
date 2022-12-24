@@ -5,6 +5,9 @@ import loginService from "./services/login";
 
 const App = (props) => {
     const [blogs, setBlogs] = useState([]);
+    const [newTitle, setNewTitle] = useState("");
+    const [newAuthor, setNewAuthor] = useState("");
+    const [newUrl, setNewUrl] = useState("");
     const [errorMessage, setErrorMessage] = useState(null);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -23,6 +26,17 @@ const App = (props) => {
         }
     }, []);
 
+    const clearUserCredentials = () => {
+        setUsername("");
+        setPassword("");
+    };
+
+    const clearBlogForm = () => {
+        setNewTitle("");
+        setNewAuthor("");
+        setNewUrl("");
+    }
+
     const handleLogin = async (event) => {
         event.preventDefault();
         try {
@@ -36,8 +50,7 @@ const App = (props) => {
             );
             blogService.setToken(user.token);
             setUser(user);
-            setUsername("");
-            setPassword("");
+            clearUserCredentials();
         } catch (exception) {
             setErrorMessage("Wrong credentials");
             setTimeout(() => {
@@ -47,10 +60,9 @@ const App = (props) => {
     };
 
     const handleLogout = () => {
-        window.localStorage.removeItem('loggedBlogAppUser');
+        window.localStorage.removeItem("loggedBlogAppUser");
         setUser(null);
-        setUsername("");
-        setPassword("");
+        clearUserCredentials();
     };
 
     const loginForm = () => (
@@ -80,23 +92,61 @@ const App = (props) => {
         </div>
     );
 
+    const createBlog = async (event) => {
+        event.preventDefault();
+        try {
+            const returnedBlog = await blogService.create({
+                title: newTitle,
+                author: newAuthor,
+                url: newUrl
+            });
+            setBlogs(blogs.concat(returnedBlog));
+            clearBlogForm();
+        } catch (exception) {
+            setErrorMessage("Wrong credentials");
+            setTimeout(() => {
+                setErrorMessage(null);
+            }, 5000);
+        }
+    }
+
+    const handleTitleChange = (event) => {
+        setNewTitle(event.target.value);
+    };
+
+    const handleAuthorChange = (event) => {
+        setNewAuthor(event.target.value);
+    };    
+
+    const handleUrlChange = (event) => {
+        setNewUrl(event.target.value);
+    };    
+
     const noteForm = () => (
         <div>
             <h2>blogs</h2>
             <p>
-                {user.name} logged-in <button type="submit" onClick={handleLogout}>logout</button>
+                {user.name} logged-in{" "}
+                <button type="submit" onClick={handleLogout}>
+                    logout
+                </button>
             </p>
+            <h2>create new</h2>
+
+            <form onSubmit={createBlog}>
+                <div>title: <input value={newTitle} onChange={handleTitleChange} /></div>
+                <div>author:<input value={newAuthor} onChange={handleAuthorChange} /></div>
+                <div>url:<input value={newUrl} onChange={handleUrlChange} /></div>
+                <div><button type="submit">create</button></div>
+            </form>
+
             {blogs.map((blog) => (
                 <Blog key={blog.id} blog={blog} />
             ))}
         </div>
     );
 
-    return (
-        <div>
-            {user === null ? loginForm() : noteForm() }
-        </div>
-    );
+    return <div>{user === null ? loginForm() : noteForm()}</div>;
 };
 
 export default App;
