@@ -2,16 +2,19 @@ import { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import Notification from "./components/Notification";
+import "./App.css";
 
 const App = (props) => {
     const [blogs, setBlogs] = useState([]);
     const [newTitle, setNewTitle] = useState("");
     const [newAuthor, setNewAuthor] = useState("");
     const [newUrl, setNewUrl] = useState("");
-    const [errorMessage, setErrorMessage] = useState(null);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [user, setUser] = useState(null);
+    const [notification, setNotification] = useState(null);
+    const [notificationType, setNotificationType] = useState(null);
 
     useEffect(() => {
         blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -37,6 +40,12 @@ const App = (props) => {
         setNewUrl("");
     }
 
+    const displayNotification = (msg, type) => {
+        setNotification(msg);
+        setNotificationType(type);
+        setTimeout(() => {setNotification(null)}, 5000);
+    }
+
     const handleLogin = async (event) => {
         event.preventDefault();
         try {
@@ -52,10 +61,7 @@ const App = (props) => {
             setUser(user);
             clearUserCredentials();
         } catch (exception) {
-            setErrorMessage("Wrong credentials");
-            setTimeout(() => {
-                setErrorMessage(null);
-            }, 5000);
+            displayNotification("Wrong credentials", "error");
         }
     };
 
@@ -68,6 +74,7 @@ const App = (props) => {
     const loginForm = () => (
         <div>
             <h2>Log in to application</h2>
+            <Notification message={notification} notificationType={notificationType}/>
             <form onSubmit={handleLogin}>
                 <div>
                     username
@@ -102,11 +109,12 @@ const App = (props) => {
             });
             setBlogs(blogs.concat(returnedBlog));
             clearBlogForm();
+            displayNotification(
+                `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`, 
+                "success"
+            );
         } catch (exception) {
-            setErrorMessage("Wrong credentials");
-            setTimeout(() => {
-                setErrorMessage(null);
-            }, 5000);
+            displayNotification(exception.response.data.error, "error");
         }
     }
 
@@ -125,6 +133,7 @@ const App = (props) => {
     const noteForm = () => (
         <div>
             <h2>blogs</h2>
+            <Notification message={notification} notificationType={notificationType}/>
             <p>
                 {user.name} logged-in{" "}
                 <button type="submit" onClick={handleLogout}>
