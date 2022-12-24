@@ -124,6 +124,17 @@ test("succeeds with status code 204 if id is valid", async () => {
     expect(urls).not.toContain(blogToDelete.url);
 });
 
+test("test to verify if blog likes can be updated", async () => {
+    const insertedBlogs = await helper.blogsInDb();
+    const blogToUpdate = insertedBlogs[0];
+
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send({"likes": 100}).expect(200);
+
+    const blogsAtEnd = await helper.blogsInDb();
+
+    expect(blogsAtEnd[0].likes).toBe(100);
+});
+
 afterAll(() => {
     mongoose.connection.close();
 });
