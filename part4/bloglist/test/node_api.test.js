@@ -47,7 +47,7 @@ test("a valid blog can be added", async () => {
         title: "newly inserted blog",
         author: "test",
         url: "test.com",
-        likes: 5
+        likes: 5,
     };
 
     await api
@@ -67,7 +67,7 @@ test("a blog can be added with no likes", async () => {
     const newBlog = {
         title: "newly inserted blog",
         author: "test",
-        url: "test.com"
+        url: "test.com",
     };
 
     await api
@@ -86,10 +86,10 @@ test("a blog can be added with no likes", async () => {
 test("throw error if title is missing", async () => {
     const newBlog = {
         author: "test",
-        url: "test.com"
+        url: "test.com",
     };
 
-    await api.post("/api/blogs").send(newBlog).expect(400)
+    await api.post("/api/blogs").send(newBlog).expect(400);
 
     const insertedBlogs = await helper.blogsInDb();
 
@@ -99,14 +99,29 @@ test("throw error if title is missing", async () => {
 test("throw error if url is missing", async () => {
     const newBlog = {
         title: "newly inserted blog",
-        author: "test"
+        author: "test",
     };
 
-    await api.post("/api/blogs").send(newBlog).expect(400)
+    await api.post("/api/blogs").send(newBlog).expect(400);
 
     const insertedBlogs = await helper.blogsInDb();
 
     expect(insertedBlogs).toHaveLength(helper.initialBlogs.length);
+});
+
+test("succeeds with status code 204 if id is valid", async () => {
+    const insertedBlogs = await helper.blogsInDb();
+    const blogToDelete = insertedBlogs[0];
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+    const blogsAtEnd = await helper.blogsInDb();
+
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
+
+    const urls = blogsAtEnd.map((r) => r.url);
+
+    expect(urls).not.toContain(blogToDelete.url);
 });
 
 afterAll(() => {
