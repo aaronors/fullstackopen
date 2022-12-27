@@ -5,15 +5,11 @@ import loginService from "./services/login";
 import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
-
-import "./App.css";
 import Togglable from "./components/Togglable";
+import "./App.css";
 
 const App = (props) => {
     const [blogs, setBlogs] = useState([]);
-    const [newTitle, setNewTitle] = useState("");
-    const [newAuthor, setNewAuthor] = useState("");
-    const [newUrl, setNewUrl] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [user, setUser] = useState(null);
@@ -39,12 +35,6 @@ const App = (props) => {
         setUsername("");
         setPassword("");
     };
-
-    const clearBlogForm = () => {
-        setNewTitle("");
-        setNewAuthor("");
-        setNewUrl("");
-    }
 
     const displayNotification = (msg, type) => {
         setNotification(msg);
@@ -91,16 +81,10 @@ const App = (props) => {
         </div>
     );
 
-    const createBlog = async (event) => {
-        event.preventDefault();
+    const createBlog = async (blogObject) => {
         try {
-            const returnedBlog = await blogService.create({
-                title: newTitle,
-                author: newAuthor,
-                url: newUrl
-            });
+            const returnedBlog = await blogService.create(blogObject);
             setBlogs(blogs.concat(returnedBlog));
-            clearBlogForm();
             displayNotification(
                 `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`, 
                 "success"
@@ -123,15 +107,7 @@ const App = (props) => {
             </p>
 
             <Togglable buttonLabel="new blog" ref={blogFormRef}>
-                <BlogForm
-                    createBlog = {createBlog}
-                    newTitle = {newTitle}
-                    setNewTitle = {setNewTitle}
-                    newAuthor = {newAuthor}
-                    setNewAuthor = {setNewAuthor}
-                    newUrl = {newUrl}
-                    setNewUrl = {setNewUrl}
-                />
+                <BlogForm createBlog = {createBlog} />
             </Togglable>
 
             {blogs.map((blog) => (
