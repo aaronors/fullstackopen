@@ -1,8 +1,6 @@
 import { useState } from "react";
 
-import BlogForm from "./BlogForm";
-
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlogLikes }) => {
     const [showDetails, setShowDetails] = useState(false);
 
     const hideWhenVisible = { display: showDetails ? "none" : "" };
@@ -32,7 +30,7 @@ const Blog = ({ blog }) => {
                     <button onClick={toggleShowDetails}>hide</button>
                 </div>
                 <div>{blog.url}</div>
-                <div>{blog.likes} 0 <button>like</button></div>
+                <div>{blog.likes} <button onClick={updateBlogLikes}>like</button></div>
                 <div>{blog.user.name}</div>
             </div>
         </div>

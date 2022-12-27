@@ -95,6 +95,23 @@ const App = (props) => {
         }
     }
 
+    const updateBlogLikes = async (blogObject) => {
+        try {
+            //console.log("-- likes = " + blogObject.likes);
+            const returnedBlog = await blogService.updateLikes(blogObject);
+            setBlogs(
+                blogs.map((blog) => (blog.id !== returnedBlog.id ? blog : returnedBlog))
+            );
+            displayNotification(
+                `A like has been added to ${returnedBlog.title} `, 
+                "success"
+            );
+        } catch (exception) {
+            console.log(exception);
+            displayNotification(exception.response.data.error, "error");
+        }
+    }
+
     const blogDisplay = () => (
         <div>
             <h2>blogs</h2>
@@ -111,7 +128,11 @@ const App = (props) => {
             </Togglable>
 
             {blogs.map((blog) => (
-                <Blog key={blog.id} blog={blog} />
+                <Blog 
+                    key={blog.id} 
+                    blog={blog} 
+                    updateBlogLikes={() => updateBlogLikes(blog)}
+                />
             ))}
         </div>
     );
