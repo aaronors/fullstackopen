@@ -106,7 +106,7 @@ const App = (props) => {
                 </button>
             </p>
 
-            <Togglable buttonLabel="new blog" ref={blogFormRef}>
+            <Togglable showLabel="new blog" hideLabel="cancel" ref={blogFormRef}>
                 <BlogForm createBlog = {createBlog} />
             </Togglable>
 
