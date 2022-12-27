@@ -18,8 +18,14 @@ const App = (props) => {
 
     const blogFormRef = useRef();
 
+    const sortBlogs = (blogList) => {
+        return blogList.sort((a, b) => {return b.likes - a.likes});
+    }
+
     useEffect(() => {
-        blogService.getAll().then((blogs) => setBlogs(blogs));
+        blogService.getAll().then((blogs) => {
+            setBlogs(sortBlogs(blogs));
+        });
     }, []);
 
     useEffect(() => {
@@ -97,13 +103,12 @@ const App = (props) => {
 
     const updateBlogLikes = async (blogObject) => {
         try {
-            //console.log("-- likes = " + blogObject.likes);
             const returnedBlog = await blogService.updateLikes(blogObject);
-            setBlogs(
-                blogs.map((blog) => (blog.id !== returnedBlog.id ? blog : returnedBlog))
-            );
+            const updatedBlogList = blogs.map((blog) => (blog.id !== returnedBlog.id ? blog : returnedBlog));
+
+            setBlogs(sortBlogs(updatedBlogList));
             displayNotification(
-                `A like has been added to ${returnedBlog.title} `, 
+                `A like has been added to ${returnedBlog.title}`, 
                 "success"
             );
         } catch (exception) {
