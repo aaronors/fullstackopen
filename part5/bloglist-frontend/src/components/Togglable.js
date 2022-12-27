@@ -34,5 +34,5 @@ Togglable.propTypes = {
     showLabel: PropTypes.string.isRequired,
     hideLabel: PropTypes.string.isRequired,
   }
-
+ 
 export default Togglable;
