@@ -117,6 +117,24 @@ const App = (props) => {
         }
     }
 
+    const deleteBlog = async (blogObject) => {
+        if(!window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author}`)) return;
+
+        try {
+            await blogService.remove(blogObject);
+            setBlogs(blogs.filter(blog => blog.id !== blogObject.id));
+
+            displayNotification(
+                `${blogObject.title} has been deleted`, 
+                "success"
+            );
+        } catch (exception) {
+            console.log(exception);
+            displayNotification(exception.response.data.error, "error");
+        }
+    }
+
+
     const blogDisplay = () => (
         <div>
             <h2>blogs</h2>
@@ -137,6 +155,7 @@ const App = (props) => {
                     key={blog.id} 
                     blog={blog} 
                     updateBlogLikes={() => updateBlogLikes(blog)}
+                    deleteBlog={() => deleteBlog(blog)}
                 />
             ))}
         </div>
