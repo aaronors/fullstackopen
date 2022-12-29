@@ -6,6 +6,8 @@ import Blog from "./Blog";
 
 let container;
 let blog;
+let updatedBlogLikes = jest.fn();
+let deleteBlog = jest.fn();
 
 beforeEach(() => {
     blog = {
@@ -21,7 +23,7 @@ beforeEach(() => {
         __v: 1
     };
     
-    container = render(<Blog key={blog.id} blog={blog} updateBlogLikes={jest.fn()} deleteBlog={jest.fn()}/>).container;
+    container = render(<Blog key={blog.id} blog={blog} updateBlogLikes={updatedBlogLikes} deleteBlog={deleteBlog}/>).container;
 });
 
 
@@ -42,4 +44,15 @@ test("<Blog/> shows all info after clicking the show button", async () => {
     const div = container.querySelector(".blogBody");
     expect(div).not.toHaveStyle("display: none");
 
+});
+
+test("<Blog/> like button works as expected", async () => {
+    const user = userEvent.setup();
+    const showButton = screen.getByText("show");
+    await user.click(showButton);
+
+    const likeButton = screen.getByText("like");
+    await user.click(likeButton);
+    await user.click(likeButton);
+    expect(updatedBlogLikes.mock.calls).toHaveLength(2)
 });
