@@ -59,6 +59,7 @@ describe("Blog app", function () {
                     url: "url.com"
                 });
             });            
+
             it("A blog can be liked", function () {
                 cy.contains("title author").contains("show").click();
                 cy.contains("0").contains("like").click();
@@ -68,6 +69,14 @@ describe("Blog app", function () {
 
                 cy.get(".blogBody").should("contain", "1");
             })
+
+            it("A blog can be deleted", function () {
+                cy.contains("title author").contains("show").click();
+                cy.contains("remove").click();
+
+                cy.get(".success").should("contain", "title has been deleted");        
+                cy.get("html").should("not.contain", "title author");  
+            })            
 
         });
     });
