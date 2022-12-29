@@ -14,23 +14,25 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress:open": "cypress open"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:cypress/recommended"
     ],
     "testing-library/no-debugging-utils": [
-		"error",
-		{
-			"utilsToCheckFor": {
-				"debug": false,
-				"logRoles": true,
-				"logDOM": true
-			}
-		}
-	]
+      "error",
+      {
+        "utilsToCheckFor": {
+          "debug": false,
+          "logRoles": true,
+          "logDOM": true
+        }
+      }
+    ]
   },
   "browserslist": {
     "production": [
@@ -49,6 +51,8 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
+    "cypress": "^12.2.0",
+    "eslint-plugin-cypress": "^2.12.1",
     "jest-watch-typeahead": "^0.6.5"
   }
 }
