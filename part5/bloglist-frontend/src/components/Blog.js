@@ -20,11 +20,11 @@ const Blog = ({ blog, updateBlogLikes, deleteBlog }) => {
 
     return (
         <div>
-            <div style={{...hideWhenVisible, ...blogStyle}}>
+            <div className="blogHeader" style={{...hideWhenVisible, ...blogStyle}}>
                 {blog.title} {blog.author}&emsp; 
                 <button onClick={toggleShowDetails}>show</button>
             </div>
-            <div style={{...showWhenVisible, ...blogStyle}}>
+            <div className="blogBody" style={{...showWhenVisible, ...blogStyle}}>
                 <div>
                     {blog.title} {blog.author} &emsp; 
                     <button onClick={toggleShowDetails}>hide</button>
