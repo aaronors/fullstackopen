@@ -53,11 +53,7 @@ describe("Blog app", function () {
 
         describe("and a blog exists", function () {
             beforeEach(function () {
-                cy.createBlog({
-                    title: "title",
-                    author: "author",
-                    url: "url.com"
-                });
+                cy.createBlog({title: "title", author: "author", url: "url.com"});
             });            
 
             it("A blog can be liked", function () {
@@ -78,6 +74,19 @@ describe("Blog app", function () {
                 cy.get("html").should("not.contain", "title author");  
             })            
 
+        });
+        describe("and a multiple blogs exist", function () {
+            beforeEach(function () {
+                cy.createBlog({title: "title1", author: "author1", url: "1url.com", likes: 5});
+                cy.createBlog({title: "title2", author: "author2", url: "2url.com", likes: 10});
+                cy.createBlog({title: "title3", author: "author3", url: "3url.com", likes: 15});
+            });      
+
+            it.only("The blogs are ordered in descending order by likes", function () {
+                cy.get("li").eq(0).should("contain", "title3");
+                cy.get("li").eq(1).should("contain", "title2");
+                cy.get("li").eq(2).should("contain", "title1");
+            });
         });
     });
 });

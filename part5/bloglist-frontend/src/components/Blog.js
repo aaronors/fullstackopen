@@ -19,7 +19,7 @@ const Blog = ({ blog, updateBlogLikes, deleteBlog }) => {
     };
 
     return (
-        <div>
+        <li>
             <div className="blogHeader" style={{...hideWhenVisible, ...blogStyle}}>
                 {blog.title} {blog.author}&emsp; 
                 <button onClick={toggleShowDetails}>show</button>
@@ -34,7 +34,7 @@ const Blog = ({ blog, updateBlogLikes, deleteBlog }) => {
                 <div>{blog.user.name}</div>
                 <button onClick={deleteBlog}>remove</button>
             </div>
-        </div>
+        </li>
     );
 };
 
