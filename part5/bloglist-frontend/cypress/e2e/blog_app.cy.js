@@ -36,4 +36,19 @@ describe("Blog app", function () {
             cy.get("html").should("not.contain", "aaron logged in");
         });
     });
+    describe("when logged in", function () {
+        beforeEach(function () {
+            cy.login({ username: "aaronors", password: "password" });
+        });
+
+        it.only("A blog can be created", function () {
+            cy.contains("new blog").click();
+            cy.get("#titleInput").type("title");
+            cy.get("#authorInput").type("author");
+            cy.get("#urlInput").type("url.com");
+            cy.get("#createBlog").click();
+
+            cy.contains("title author");
+        });
+    });
 });
