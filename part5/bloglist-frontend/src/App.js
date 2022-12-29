@@ -140,7 +140,7 @@ const App = (props) => {
             <h2>blogs</h2>
             <Notification message={notification} notificationType={notificationType}/>
             <p>
-                {user.name} logged-in{" "}
+                {user.name} logged in{" "}
                 <button type="submit" onClick={handleLogout}>
                     logout
                 </button>
