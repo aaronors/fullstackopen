@@ -10,6 +10,9 @@ import {
     useNavigate,
     useMatch,
 } from "react-router-dom";
+import Notification from "./components/Notification";
+import "./App.css";
+
 
 const Anecdote = ({anecdote}) => (
     <div>
@@ -139,10 +142,20 @@ const App = () => {
     ]);
 
     const [notification, setNotification] = useState("");
+    const [notificationType, setNotificationType] = useState(null);
+    const navigate = useNavigate();
+
+    const displayNotification = (msg, type) => {
+        setNotification(msg);
+        setNotificationType(type);
+        setTimeout(() => {setNotification(null)}, 5000);
+    }
 
     const addNew = (anecdote) => {
         anecdote.id = Math.round(Math.random() * 10000);
         setAnecdotes(anecdotes.concat(anecdote));
+        navigate("/");
+        displayNotification(`${anecdote.content} by ${anecdote.author} was added`,"success");
     };
 
     const anecdoteById = (id) => anecdotes.find((a) => a.id === id);
@@ -168,6 +181,7 @@ const App = () => {
     return (
         <div>
             <h1>Software anecdotes</h1>
+            <Notification message={notification} notificationType={notificationType}/>
             <div>
                 <Link style={padding} to="/">
                     anecdotes
