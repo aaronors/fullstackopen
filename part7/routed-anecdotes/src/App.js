@@ -161,13 +161,32 @@ const App = () => {
         setAnecdotes(anecdotes.map((a) => (a.id === id ? voted : a)));
     };
 
+    const padding = {
+        padding: 5,
+    };
+
     return (
         <div>
+            <div>
+                <Link style={padding} to="/">
+                    anecdotes
+                </Link>
+                <Link style={padding} to="/create">
+                    create new
+                </Link>
+                <Link style={padding} to="/about">
+                    about
+                </Link>
+            </div>
+
             <h1>Software anecdotes</h1>
-            <Menu />
-            <AnecdoteList anecdotes={anecdotes} />
-            <About />
-            <CreateNew addNew={addNew} />
+            <Routes>
+                <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
+                <Route path="/create" element={<CreateNew addNew={addNew} />} />
+                <Route path="/about" element={<About />} />
+            </Routes>
+
+            <br />
             <Footer />
         </div>
     );
