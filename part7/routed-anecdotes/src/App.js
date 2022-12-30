@@ -75,13 +75,9 @@ const Footer = () => (
 );
 
 const CreateNew = (props) => {
-    // const [content, setContent] = useState("");
-    // const [author, setAuthor] = useState("");
-    // const [info, setInfo] = useState("");
-
-    const content = useField("content");
-    const author = useField("author");
-    const info = useField("info");
+    const { resetField: contentReset, ...content } = useField("content");
+    const { resetField: authorReset, ...author } = useField("author");
+    const { resetField: infoReset, ...info } = useField("info");
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -92,6 +88,12 @@ const CreateNew = (props) => {
             votes: 0,
         });
     };
+
+    const handleReset = () => {
+        contentReset();
+        authorReset();
+        infoReset();
+    }
 
     return (
         <div>
@@ -109,7 +111,8 @@ const CreateNew = (props) => {
                     url for more info
                     <input {...info}/>
                 </div>
-                <button>create</button>
+                <button type="submit">create</button>
+                <button type="button" onClick={handleReset}>reset</button>
             </form>
         </div>
     );
