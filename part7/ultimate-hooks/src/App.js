@@ -17,11 +17,10 @@ const useField = (type) => {
 
 const useResource = (baseUrl) => {
     const [resources, setResources] = useState([]);
-
-    // ...
-
+    
     const create = async (newObject) => {
         const response = await axios.post(baseUrl, newObject);
+        getAll();
         return response.data;
     };
 
@@ -51,7 +50,7 @@ const App = () => {
     useEffect(() => {
         noteService.getAll();
         personService.getAll();
-    }, [noteService,personService]);
+    }, []);
 
     const handleNoteSubmit = (event) => {
         event.preventDefault();
