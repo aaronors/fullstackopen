@@ -6,13 +6,13 @@ import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { setNotification } from "./reducers/notificationReducer";
+import { initializeBlogs, createNewBlog } from './reducers/blogReducer'
 
 import "./App.css";
 
 const App = (props) => {
-    const [blogs, setBlogs] = useState([]);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [user, setUser] = useState(null);
@@ -20,15 +20,11 @@ const App = (props) => {
     const blogFormRef = useRef();
     const dispatch = useDispatch();
 
-    const sortBlogs = (blogList) => {
-        return blogList.sort((a, b) => {return b.likes - a.likes});
-    }
+    const blogs = useSelector(state => state.blogs)
 
     useEffect(() => {
-        blogService.getAll().then((blogs) => {
-            setBlogs(sortBlogs(blogs));
-        });
-    }, []);
+        dispatch(initializeBlogs());
+    }, [dispatch]);
 
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser");
@@ -85,29 +81,30 @@ const App = (props) => {
 
     const createBlog = async (blogObject) => {
         try {
-            const returnedBlog = await blogService.create(blogObject);
-            setBlogs(blogs.concat(returnedBlog));
+            dispatch(createNewBlog(blogObject));
+
             dispatch(setNotification(
-                `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`, 
+                `A new blog ${blogObject.title} by ${blogObject.author} added`, 
                 "success"
             ))
 
             blogFormRef.current.toggleVisibility();
         } catch (exception) {
+            console.log(exception);
             dispatch(setNotification(exception.response.data.error, "error"))
         }
     }
 
     const updateBlogLikes = async (blogObject) => {
         try {
-            const returnedBlog = await blogService.updateLikes(blogObject);
-            const updatedBlogList = blogs.map((blog) => (blog.id !== returnedBlog.id ? blog : returnedBlog));
+            // const returnedBlog = await blogService.updateLikes(blogObject);
+            // const updatedBlogList = blogs.map((blog) => (blog.id !== returnedBlog.id ? blog : returnedBlog));
 
-            setBlogs(sortBlogs(updatedBlogList));
-            dispatch(setNotification(
-                `A like has been added to ${returnedBlog.title}`, 
-                "success"
-            ))
+            // //setBlogs(sortBlogs(updatedBlogList));
+            // dispatch(setNotification(
+            //     `A like has been added to ${returnedBlog.title}`, 
+            //     "success"
+            // ))
 
         } catch (exception) {
             console.log(exception);
@@ -119,13 +116,13 @@ const App = (props) => {
         if(!window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author}`)) return;
 
         try {
-            await blogService.remove(blogObject);
-            setBlogs(blogs.filter(blog => blog.id !== blogObject.id));
+            // await blogService.remove(blogObject);
+            // setBlogs(blogs.filter(blog => blog.id !== blogObject.id));
 
-            dispatch(setNotification(
-                `${blogObject.title} has been deleted`, 
-                "success"
-            ))
+            // dispatch(setNotification(
+            //     `${blogObject.title} has been deleted`, 
+            //     "success"
+            // ))
 
         } catch (exception) {
             console.log(exception);
@@ -146,7 +143,7 @@ const App = (props) => {
             </p>
 
             <Togglable showLabel="new blog" hideLabel="cancel" ref={blogFormRef}>
-                <BlogForm createBlog = {createBlog} />
+                <BlogForm createBlog={createBlog}/>
             </Togglable>
             <ul>
                 {blogs.map((blog) => (
