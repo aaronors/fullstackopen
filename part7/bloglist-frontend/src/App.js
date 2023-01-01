@@ -6,6 +6,9 @@ import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
+import { useDispatch } from "react-redux";
+import { setNotification } from "./reducers/notificationReducer";
+
 import "./App.css";
 
 const App = (props) => {
@@ -13,10 +16,9 @@ const App = (props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [user, setUser] = useState(null);
-    const [notification, setNotification] = useState(null);
-    const [notificationType, setNotificationType] = useState(null);
 
     const blogFormRef = useRef();
+    const dispatch = useDispatch();
 
     const sortBlogs = (blogList) => {
         return blogList.sort((a, b) => {return b.likes - a.likes});
@@ -42,12 +44,6 @@ const App = (props) => {
         setPassword("");
     };
 
-    const displayNotification = (msg, type) => {
-        setNotification(msg);
-        setNotificationType(type);
-        setTimeout(() => {setNotification(null)}, 5000);
-    }
-
     const handleLogin = async (event) => {
         event.preventDefault();
         try {
@@ -63,7 +59,7 @@ const App = (props) => {
             setUser(user);
             clearUserCredentials();
         } catch (exception) {
-            displayNotification("Wrong credentials", "error");
+            dispatch(setNotification("Wrong credentials", "error"))
         }
     };
 
@@ -76,7 +72,7 @@ const App = (props) => {
     const loginDisplay = () => (
         <div>
             <h2>Log in to application</h2>
-            <Notification message={notification} notificationType={notificationType}/>
+            <Notification />
             <LoginForm
                     handleLogin = {handleLogin}
                     username = {username}
@@ -91,13 +87,14 @@ const App = (props) => {
         try {
             const returnedBlog = await blogService.create(blogObject);
             setBlogs(blogs.concat(returnedBlog));
-            displayNotification(
+            dispatch(setNotification(
                 `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`, 
                 "success"
-            );
+            ))
+
             blogFormRef.current.toggleVisibility();
         } catch (exception) {
-            displayNotification(exception.response.data.error, "error");
+            dispatch(setNotification(exception.response.data.error, "error"))
         }
     }
 
@@ -107,13 +104,14 @@ const App = (props) => {
             const updatedBlogList = blogs.map((blog) => (blog.id !== returnedBlog.id ? blog : returnedBlog));
 
             setBlogs(sortBlogs(updatedBlogList));
-            displayNotification(
+            dispatch(setNotification(
                 `A like has been added to ${returnedBlog.title}`, 
                 "success"
-            );
+            ))
+
         } catch (exception) {
             console.log(exception);
-            displayNotification(exception.response.data.error, "error");
+            dispatch(setNotification(exception.response.data.error, "error"))
         }
     }
 
@@ -124,13 +122,14 @@ const App = (props) => {
             await blogService.remove(blogObject);
             setBlogs(blogs.filter(blog => blog.id !== blogObject.id));
 
-            displayNotification(
+            dispatch(setNotification(
                 `${blogObject.title} has been deleted`, 
                 "success"
-            );
+            ))
+
         } catch (exception) {
             console.log(exception);
-            displayNotification(exception.response.data.error, "error");
+            dispatch(setNotification(exception.response.data.error, "error"))
         }
     }
 
@@ -138,7 +137,7 @@ const App = (props) => {
     const blogDisplay = () => (
         <div>
             <h2>blogs</h2>
-            <Notification message={notification} notificationType={notificationType}/>
+            <Notification />
             <p>
                 {user.name} logged in{" "}
                 <button type="submit" onClick={handleLogout}>
