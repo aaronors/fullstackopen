@@ -12,7 +12,6 @@ import "./App.css";
 
 const App = (props) => {
     const dispatch = useDispatch();
-
     const user = useSelector(state => state.user)
 
     useEffect(() => {
