@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import blogService from "../services/blogs";
+import { setNotification } from "../reducers/notificationReducer";
 
 const sortBlogs = (blogList) => {
     return blogList.sort((a, b) => {return b.likes - a.likes});
@@ -20,7 +21,7 @@ const blogSlice = createSlice({
         },
         updateListRemove(state, action) {
             const removedBlog = action.payload;
-            return sortBlogs(state.filter(blog => blog.id !== removedBlog.id));
+            return state.filter(blog => blog.id !== removedBlog.id);
         },
         appendBlog(state, action) {
             state.push(action.payload);
@@ -43,23 +44,49 @@ export const initializeBlogs = () => {
 
 export const createNewBlog = (blog) => {
     return async (dispatch) => {
-        const newBlog = await blogService.create(blog);
-        dispatch(appendBlog(newBlog));
+        try {
+            const newBlog = await blogService.create(blog);
+            dispatch(appendBlog(newBlog));
+            dispatch(setNotification(
+                `A new blog ${blog.title} by ${blog.author} added`, 
+                "success"
+            ))
+        } catch (exception) {
+            console.log(exception);
+            dispatch(setNotification(exception.response.data.error, "error"))
+        }
     };
 };    
 
 export const updateBlog = (blog) => {
     return async (dispatch) => {
-        const returnedBlog = await blogService.updateLikes(blog);
-        dispatch(updateList(returnedBlog));
+        try {
+            const returnedBlog = await blogService.updateLikes(blog);
+            dispatch(updateList(returnedBlog));
+            dispatch(setNotification(
+                `A like has been added to ${blog.title}`, 
+                "success"
+            ))            
+        } catch (exception) {
+            console.log(exception);
+            dispatch(setNotification(exception.response.data.error, "error"))
+        }
     };
 };    
 
 export const removeBlog = (blog) => {
     return async (dispatch) => {
-        await blogService.remove(blog);
-        dispatch(updateListRemove(blog));
-
+        try {
+            await blogService.remove(blog);
+            dispatch(updateListRemove(blog));
+            dispatch(setNotification(
+                `${blog.title} has been deleted`, 
+                "success"
+            ))            
+        } catch (exception) {
+            console.log(exception);
+            dispatch(setNotification(exception.response.data.error, "error"))
+        }
     };
 };    
 

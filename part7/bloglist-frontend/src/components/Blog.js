@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { updateBlog, removeBlog } from '../reducers/blogReducer'
 
-const Blog = ({ blog, updateBlogLikes, deleteBlog }) => {
+const Blog = ({ blog }) => {
     const [showDetails, setShowDetails] = useState(false);
+    const dispatch = useDispatch();
 
     const hideWhenVisible = { display: showDetails ? "none" : "" };
     const showWhenVisible = { display: showDetails ? "" : "none" };    
@@ -30,9 +33,9 @@ const Blog = ({ blog, updateBlogLikes, deleteBlog }) => {
                     <button onClick={toggleShowDetails}>hide</button>
                 </div>
                 <div>{blog.url}</div>
-                <div>{blog.likes} <button onClick={updateBlogLikes}>like</button></div>
+                <div>{blog.likes} <button onClick={() => {dispatch(updateBlog(blog))}}>like</button></div>
                 <div>{blog.user.name}</div>
-                <button onClick={deleteBlog}>remove</button>
+                <button onClick={() => {dispatch(removeBlog(blog))}}>remove</button>
             </div>
         </li>
     );

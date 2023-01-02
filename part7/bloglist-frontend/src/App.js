@@ -1,16 +1,14 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
-import loginService from "./services/login";
 import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
 import { useSelector, useDispatch } from "react-redux";
-import { setNotification } from "./reducers/notificationReducer";
 import { setUser, logout } from "./reducers/userReducer";
 
-import { initializeBlogs, createNewBlog, updateBlog, removeBlog } from './reducers/blogReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 
 import "./App.css";
 
@@ -44,52 +42,6 @@ const App = (props) => {
         </div>
     );
 
-    const createBlog = (blogObject) => {
-        try {
-            dispatch(createNewBlog(blogObject));
-
-            dispatch(setNotification(
-                `A new blog ${blogObject.title} by ${blogObject.author} added`, 
-                "success"
-            ))
-
-            blogFormRef.current.toggleVisibility();
-        } catch (exception) {
-            console.log(exception);
-            dispatch(setNotification(exception.response.data.error, "error"))
-        }
-    }
-
-    const updateBlogLikes = (blogObject) => {
-        try {
-            dispatch(updateBlog(blogObject));
-            dispatch(setNotification(
-                `A like has been added to ${blogObject.title}`, 
-                "success"
-            ))
-
-        } catch (exception) {
-            console.log(exception);
-            dispatch(setNotification(exception.response.data.error, "error"))
-        }
-    }
-
-    const deleteBlog = (blogObject) => {
-        if(!window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author}`)) return;
-
-        try {
-            dispatch(removeBlog(blogObject));
-            dispatch(setNotification(
-                `${blogObject.title} has been deleted`, 
-                "success"
-            ))
-
-        } catch (exception) {
-            console.log(exception);
-            dispatch(setNotification(exception.response.data.error, "error"))
-        }
-    }
-
     const blogDisplay = () => (
         <div>
             <h2>blogs</h2>
@@ -102,16 +54,11 @@ const App = (props) => {
             </p>
 
             <Togglable showLabel="new blog" hideLabel="cancel" ref={blogFormRef}>
-                <BlogForm createBlog={createBlog}/>
+                <BlogForm blogFormRef={blogFormRef}/>
             </Togglable>
             <ul>
                 {blogs.map((blog) => (
-                    <Blog 
-                        key={blog.id} 
-                        blog={blog} 
-                        updateBlogLikes={() => updateBlogLikes(blog)}
-                        deleteBlog={() => deleteBlog(blog)}
-                    />
+                    <Blog key={blog.id} blog={blog} />
                 ))}
             </ul>
         </div>
