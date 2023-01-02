@@ -8,7 +8,7 @@ import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
 import { useSelector, useDispatch } from "react-redux";
 import { setNotification } from "./reducers/notificationReducer";
-import { initializeBlogs, createNewBlog } from './reducers/blogReducer'
+import { initializeBlogs, createNewBlog, updateBlog, removeBlog } from './reducers/blogReducer'
 
 import "./App.css";
 
@@ -97,14 +97,11 @@ const App = (props) => {
 
     const updateBlogLikes = async (blogObject) => {
         try {
-            // const returnedBlog = await blogService.updateLikes(blogObject);
-            // const updatedBlogList = blogs.map((blog) => (blog.id !== returnedBlog.id ? blog : returnedBlog));
-
-            // //setBlogs(sortBlogs(updatedBlogList));
-            // dispatch(setNotification(
-            //     `A like has been added to ${returnedBlog.title}`, 
-            //     "success"
-            // ))
+            dispatch(updateBlog(blogObject));
+            dispatch(setNotification(
+                `A like has been added to ${blogObject.title}`, 
+                "success"
+            ))
 
         } catch (exception) {
             console.log(exception);
@@ -116,20 +113,17 @@ const App = (props) => {
         if(!window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author}`)) return;
 
         try {
-            // await blogService.remove(blogObject);
-            // setBlogs(blogs.filter(blog => blog.id !== blogObject.id));
-
-            // dispatch(setNotification(
-            //     `${blogObject.title} has been deleted`, 
-            //     "success"
-            // ))
+            dispatch(removeBlog(blogObject));
+            dispatch(setNotification(
+                `${blogObject.title} has been deleted`, 
+                "success"
+            ))
 
         } catch (exception) {
             console.log(exception);
             dispatch(setNotification(exception.response.data.error, "error"))
         }
     }
-
 
     const blogDisplay = () => (
         <div>
