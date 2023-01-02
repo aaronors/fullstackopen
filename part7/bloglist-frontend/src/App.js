@@ -44,7 +44,7 @@ const App = (props) => {
         </div>
     );
 
-    const createBlog = async (blogObject) => {
+    const createBlog = (blogObject) => {
         try {
             dispatch(createNewBlog(blogObject));
 
@@ -60,7 +60,7 @@ const App = (props) => {
         }
     }
 
-    const updateBlogLikes = async (blogObject) => {
+    const updateBlogLikes = (blogObject) => {
         try {
             dispatch(updateBlog(blogObject));
             dispatch(setNotification(
@@ -74,7 +74,7 @@ const App = (props) => {
         }
     }
 
-    const deleteBlog = async (blogObject) => {
+    const deleteBlog = (blogObject) => {
         if(!window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author}`)) return;
 
         try {

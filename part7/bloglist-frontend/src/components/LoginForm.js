@@ -1,19 +1,14 @@
 
 import { useDispatch } from "react-redux";
-import { setNotification } from "../reducers/notificationReducer";
 import { login } from "../reducers/userReducer";
 
 const LoginForm = () => {
     const dispatch = useDispatch();
 
-    const handleLogin = async (event) => {
+    const handleLogin = (event) => {
         event.preventDefault();
-        try {
-            dispatch(login(event.target.username.value, event.target.password.value));
-            event.target.reset();
-        } catch (exception) {
-            dispatch(setNotification("Wrong credentials", "error"))
-        }
+        dispatch(login(event.target.username.value, event.target.password.value));
+        event.target.reset();
     };
 
     return (
