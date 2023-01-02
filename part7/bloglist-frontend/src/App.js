@@ -8,20 +8,19 @@ import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
 import { useSelector, useDispatch } from "react-redux";
 import { setNotification } from "./reducers/notificationReducer";
+import { setUser, logout } from "./reducers/userReducer";
+
 import { initializeBlogs, createNewBlog, updateBlog, removeBlog } from './reducers/blogReducer'
 
 import "./App.css";
 
 const App = (props) => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [user, setUser] = useState(null);
 
     const blogFormRef = useRef();
     const dispatch = useDispatch();
 
     const blogs = useSelector(state => state.blogs)
-
+    const user = useSelector(state => state.user)
     useEffect(() => {
         dispatch(initializeBlogs());
     }, [dispatch]);
@@ -30,52 +29,18 @@ const App = (props) => {
         const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser");
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON);
-            setUser(user);
+            dispatch(setUser(user));
             blogService.setToken(user.token);
         }
-    }, []);
+    }, [dispatch]);
 
-    const clearUserCredentials = () => {
-        setUsername("");
-        setPassword("");
-    };
-
-    const handleLogin = async (event) => {
-        event.preventDefault();
-        try {
-            const user = await loginService.login({
-                username,
-                password,
-            });
-            window.localStorage.setItem(
-                "loggedBlogAppUser",
-                JSON.stringify(user)
-            );
-            blogService.setToken(user.token);
-            setUser(user);
-            clearUserCredentials();
-        } catch (exception) {
-            dispatch(setNotification("Wrong credentials", "error"))
-        }
-    };
-
-    const handleLogout = () => {
-        window.localStorage.removeItem("loggedBlogAppUser");
-        setUser(null);
-        clearUserCredentials();
-    };
+    const handleLogout = () => { dispatch(logout()); };
 
     const loginDisplay = () => (
         <div>
             <h2>Log in to application</h2>
             <Notification />
-            <LoginForm
-                    handleLogin = {handleLogin}
-                    username = {username}
-                    password = {password}
-                    setUsername = {setUsername}
-                    setPassword = {setPassword}
-            />
+            <LoginForm />
         </div>
     );
 
