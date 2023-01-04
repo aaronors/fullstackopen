@@ -8,6 +8,11 @@ interface ExerciseResults {
     average: number 
 }
 
+interface ExerciseInputs {
+    dailyHours: Array<number>;
+    targetHours: number;
+}
+
 
 const calculateExercises = (dailyHours: Array<number>, targetHours: number): ExerciseResults => {
 
@@ -36,6 +41,33 @@ const rateTraining = (average: number, target: number) => {
     }
 }
 
+const parseBmiArguments = (args: Array<string>): ExerciseInputs => {
+    if (args.length < 4) throw new Error("Not enough arguments");
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1] , 2));
-// hours per day of week, target daily hours
+    const inputs = {} as ExerciseInputs;
+    inputs.dailyHours = [];
+    
+    for(let n = 2; n < args.length; n++){
+        if(!isNaN(Number(args[n]))){
+            if(n == 2){
+                inputs.targetHours = Number(args[n]);
+            }else{
+                inputs.dailyHours.push(Number(args[n]));
+            }
+        }else{
+            throw new Error("Provided values were not numbers!");
+        }
+    }
+    return inputs;
+};
+
+try {
+    const { dailyHours, targetHours } = parseBmiArguments(process.argv);
+    console.log(calculateExercises(dailyHours, targetHours));
+} catch (error: unknown) {
+    let errorMessage = "Something bad happened.";
+    if (error instanceof Error) {
+        errorMessage += " Error: " + error.message;
+    }
+    console.log(errorMessage);
+}
