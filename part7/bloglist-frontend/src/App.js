@@ -43,20 +43,23 @@ const App = (props) => {
         padding: 5,
     };
 
+
+    const userMatch = useMatch("/users/:id");
+
+    const selectedUser = userMatch
+        ? userList.find((user1) => user1.id === userMatch.params.id)
+        : null;
+
     return (
         <div>
-
             <div>
-                <Link style={padding} to="/">
-                    blogs
-                </Link>
-                <Link style={padding} to="/users">
-                    users
-                </Link>
+                <Link style={padding} to="/"> blogs </Link>
+                <Link style={padding} to="/users"> users </Link>
             </div>
 
             <Routes>
                 <Route path="/users" element={<UserList userList={userList}/>} />
+                <Route path="/users/:id" element={<User user={selectedUser} />} />
                 <Route path="/" element={<Home user={user}/>} />
             </Routes>
         </div>

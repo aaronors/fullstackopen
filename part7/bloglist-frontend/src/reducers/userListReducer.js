@@ -25,6 +25,5 @@ export const initializeUserList = () => {
     };
 };  
 
-
 export default userListSlice.reducer;
 
