@@ -15,6 +15,13 @@ const BlogView = ({ blog }) => {
             <div>{blog.likes} likes<button onClick={() => {dispatch(updateBlog(blog))}}>like</button></div>
             <div>added by {blog.user.name}</div>
             <button onClick={() => {dispatch(removeBlog(blog))}}>remove</button>
+            <h2>comments</h2>
+            <br/>
+            <ul>
+                {blog.comments.map((comment) => (
+                    <li>{comment}</li>
+                ))}
+            </ul>
         </div>
     )
 };
