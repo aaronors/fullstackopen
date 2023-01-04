@@ -1,12 +1,22 @@
 import { useEffect } from "react";
 import blogService from "./services/blogs";
-import LoginDisplay from "./components/LoginDisplay";
-import BlogDisplay from "./components/BlogDisplay";
+import Users from "./components/Users";
+import Home from "./components/Home";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "./reducers/userReducer";
 
 import { initializeBlogs } from './reducers/blogReducer'
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Link,
+    Navigate,
+    useParams,
+    useNavigate,
+    useMatch,
+} from "react-router-dom";
 
 import "./App.css";
 
@@ -27,7 +37,28 @@ const App = (props) => {
         }
     }, [dispatch]);
 
-    return <div>{user === null ? <LoginDisplay/> : <BlogDisplay/>}</div>;
+    const padding = {
+        padding: 5,
+    };
+
+    return (
+        <div>
+
+            <div>
+                <Link style={padding} to="/">
+                    blogs
+                </Link>
+                <Link style={padding} to="/users">
+                    users
+                </Link>
+            </div>
+
+            <Routes>
+                <Route path="/users" element={<Users />} />
+                <Route path="/" element={<Home user={user}/>} />
+            </Routes>
+        </div>
+    );
 };
 
 export default App;
