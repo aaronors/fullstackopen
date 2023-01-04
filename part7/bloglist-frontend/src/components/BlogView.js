@@ -1,8 +1,14 @@
 import { useDispatch } from "react-redux";
-import { updateBlog, removeBlog } from '../reducers/blogReducer'
+import { updateBlog, removeBlog, addComment } from '../reducers/blogReducer'
 
 const BlogView = ({ blog }) => {
     const dispatch = useDispatch();
+
+    const handleSubmitComment = (event) => {
+        event.preventDefault();
+        dispatch(addComment(blog, event.target.comment.value));
+        event.target.reset();        
+    }
 
     if (!blog) {
         return null;
@@ -16,10 +22,15 @@ const BlogView = ({ blog }) => {
             <div>added by {blog.user.name}</div>
             <button onClick={() => {dispatch(removeBlog(blog))}}>remove</button>
             <h2>comments</h2>
-            <br/>
+            <form onSubmit={handleSubmitComment}>
+                <div>
+                    <input type="text" name="comment"/>
+                    <button type="submit">add comment</button>
+                </div>
+            </form>
             <ul>
-                {blog.comments.map((comment) => (
-                    <li>{comment}</li>
+                {blog.comments.map((comment, index) => (
+                    <li key={index}>{comment}</li>
                 ))}
             </ul>
         </div>

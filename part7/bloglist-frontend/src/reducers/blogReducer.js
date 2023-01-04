@@ -74,6 +74,22 @@ export const updateBlog = (blog) => {
     };
 };    
 
+export const addComment = (blog, comment) => {
+    return async (dispatch) => {
+        try {
+            const returnedBlog = await blogService.createComment(blog, comment);
+            dispatch(updateList(returnedBlog));
+            dispatch(setNotification(
+                `A comment has been added to ${blog.title}`, 
+                "success"
+            ))            
+        } catch (exception) {
+            console.log(exception);
+            dispatch(setNotification(exception.response.data.error, "error"))
+        }
+    };
+};    
+
 export const removeBlog = (blog) => {
     return async (dispatch) => {
         try {

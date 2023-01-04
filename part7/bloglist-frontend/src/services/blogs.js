@@ -26,6 +26,11 @@ const updateLikes = (blogObject) => {
     return request.then((response) => response.data);
 };
 
+const createComment = (blogObject, userComment) => {
+    const request = axios.post(`${baseUrl}/${blogObject.id}/comments`, {comment: userComment});
+    return request.then((response) => response.data);
+}
+
 const remove = async (blogObject) => {
     const config = {
         headers: { Authorization: token },
@@ -36,4 +41,4 @@ const remove = async (blogObject) => {
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, create, setToken, updateLikes, remove };
+export default { getAll, create, setToken, updateLikes, remove, createComment };

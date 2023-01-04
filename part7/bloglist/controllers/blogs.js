@@ -32,7 +32,7 @@ blogsRouter.post("/",userExtractor ,async (request, response) => {
 
 blogsRouter.post("/:id/comments", async (request, response) => {
     const user = request.user;
-
+    
     const blog = await Blog.findById(request.params.id);
     const comment = request.body.comment;
     blog.comments = blog.comments.concat(comment);
