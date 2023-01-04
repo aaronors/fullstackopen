@@ -1,12 +1,15 @@
 import { useEffect } from "react";
 import blogService from "./services/blogs";
-import Users from "./components/Users";
+import UserList from "./components/UserList";
 import Home from "./components/Home";
+import User from "./components/User";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "./reducers/userReducer";
 
 import { initializeBlogs } from './reducers/blogReducer'
+import { initializeUserList } from "./reducers/userListReducer";
+
 import {
     BrowserRouter as Router,
     Routes,
@@ -23,9 +26,11 @@ import "./App.css";
 const App = (props) => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user)
+    const userList = useSelector(state => state.userList)
 
     useEffect(() => {
         dispatch(initializeBlogs());
+        dispatch(initializeUserList());
     }, [dispatch]);
 
     useEffect(() => {
@@ -54,7 +59,7 @@ const App = (props) => {
             </div>
 
             <Routes>
-                <Route path="/users" element={<Users />} />
+                <Route path="/users" element={<UserList userList={userList}/>} />
                 <Route path="/" element={<Home user={user}/>} />
             </Routes>
         </div>
