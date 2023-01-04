@@ -11,6 +11,7 @@ import { setUser } from "./reducers/userReducer";
 
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUserList } from "./reducers/userListReducer";
+import { logout } from "./reducers/userReducer";
 
 import {
     BrowserRouter as Router,
@@ -63,7 +64,18 @@ const App = (props) => {
             <div>
                 <Link style={padding} to="/"> blogs </Link>
                 <Link style={padding} to="/users"> users </Link>
+                {user ? (
+                    <>
+                        <em>{user.name} logged in</em>&nbsp;
+                        <button type="submit" onClick={() => {dispatch(logout())}}>
+                        logout
+                        </button>
+                    </>
+                ) : (
+                    <em></em>
+                )}
             </div>
+
             <Notification />
             <Routes>
                 <Route path="/users" element={<UserList userList={userList}/>} />
