@@ -31,9 +31,6 @@ const App = (props) => {
     useEffect(() => {
         dispatch(initializeBlogs());
         dispatch(initializeUserList());
-    }, [dispatch]);
-
-    useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser");
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON);
