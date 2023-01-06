@@ -37,7 +37,9 @@ const rateTraining = (average: number, target: number) => {
         case average >= target/2:
             return {rating: 2, ratingDescription: "Not too bad but could be better"};
         case average < target/2:
-            return {rating: 3, ratingDescription: "Try harder next time!"}
+            return {rating: 3, ratingDescription: "Try harder next time!"};
+        default:
+            throw new Error("Something bad happened");
     }
 }
 
@@ -46,7 +48,7 @@ const parseBmiArguments = (args: Array<string>): ExerciseInputs => {
 
     const inputs = {} as ExerciseInputs;
     inputs.dailyHours = [];
-    
+
     for(let n = 2; n < args.length; n++){
         if(!isNaN(Number(args[n]))){
             if(n == 2){
