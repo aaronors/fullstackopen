@@ -13,7 +13,7 @@ interface ExerciseInputs {
     targetHours: number;
 }
 
-const calculateExercises = (
+export const calculateExercises = (
     dailyHours: Array<number>,
     targetHours: number
 ): ExerciseResults => {
