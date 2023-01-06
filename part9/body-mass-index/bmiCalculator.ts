@@ -3,7 +3,7 @@ interface BmiValues {
     weight: number;
 }
 
-const calculateBmi = (height: number, weight: number) => {
+export const calculateBmi = (height: number, weight: number) => {
     //height cm , weight kg
     const bmi = weight / Math.pow(height/100, 2);
     switch (true) {
@@ -23,6 +23,8 @@ const calculateBmi = (height: number, weight: number) => {
             return "Obese (Class II)";
         case bmi >= 40:
             return "Obese (Class III)";
+        default:
+            throw new Error("Something bad happened!");
     }
 };
 
