@@ -25,10 +25,16 @@ const App = () => {
         exerciseSubmissionLink: string;
     }
 
+    interface CourseSpecialPart extends CoursePartDetailed {
+        type: "special"
+        requirements: Array<string>
+    }
+
     type CoursePart =
         | CourseNormalPart
         | CourseProjectPart
-        | CourseSubmissionPart;
+        | CourseSubmissionPart
+        | CourseSpecialPart;
 
     // this is the new coursePart variable
     const courseParts: CoursePart[] = [
@@ -58,6 +64,13 @@ const App = () => {
                 "https://fake-exercise-submit.made-up-url.dev",
             type: "submission",
         },
+        {
+            name: "Backend development",
+            exerciseCount: 21,
+            description: "Typing the backend",
+            requirements: ["nodejs", "jest"],
+            type: "special",
+        },
     ];
 
     const Part = ({part}: {part: CoursePart}) => {
@@ -84,8 +97,14 @@ const App = () => {
                         <div>submit to {part.exerciseSubmissionLink}</div>
                     </p>
                 )            
-            default:
-                 return <p></p>
+            case "special":
+                return (
+                    <p>
+                        <div>{part.name} {part.exerciseCount}</div>
+                        <i>{part.description}</i>
+                        <div>{part.requirements.toString()}</div>
+                    </p>
+                )        
         }
     };
 
