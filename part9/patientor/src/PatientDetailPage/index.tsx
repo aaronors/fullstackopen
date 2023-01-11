@@ -6,7 +6,7 @@ import { Patient, Gender } from "../types";
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 const PatientDetailPage = ({patientId}: {patientId: string | null}) => {
-    const [{ currentPatient } , dispatch] = useStateValue();
+    const [{ currentPatient, diagnoses } , dispatch] = useStateValue();
 
     React.useEffect(() => {
         const fetchCurrentPatient = async () => {
@@ -51,7 +51,7 @@ const PatientDetailPage = ({patientId}: {patientId: string | null}) => {
                     <div>{entry.date} <i>{entry.description}</i></div>
                     <ul>
                         {entry.diagnosisCodes?.map((code, codeIndex) => (
-                            <li key={codeIndex}>{code}</li>
+                            <li key={codeIndex}>{code} <i>{diagnoses[code].name}</i></li>
                         ))}
                     </ul>
                 </div>
