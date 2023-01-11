@@ -44,6 +44,19 @@ const PatientDetailPage = ({patientId}: {patientId: string | null}) => {
             <h2>{currentPatient.name}<GenderIcon gender={currentPatient.gender}/></h2>
             <div>ssn: {currentPatient.ssn}</div>
             <div>occupation: {currentPatient.occupation}</div>
+            <h4>entries</h4>
+            
+            {currentPatient.entries.map((entry, index) => (
+                <div key={index}>
+                    <div>{entry.date} <i>{entry.description}</i></div>
+                    <ul>
+                        {entry.diagnosisCodes?.map((code, codeIndex) => (
+                            <li key={codeIndex}>{code}</li>
+                        ))}
+                    </ul>
+                </div>
+            ))}
+            
         </>
     );
 };
