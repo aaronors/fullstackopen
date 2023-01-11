@@ -12,7 +12,7 @@ import PatientDetailPage from "./PatientDetailPage";
 import { Typography } from "@material-ui/core";
 
 const App = () => {
-    const [{ patients }, dispatch] = useStateValue();
+    const [, dispatch] = useStateValue();
     React.useEffect(() => {
         void axios.get<void>(`${apiBaseUrl}/ping`);
 
@@ -31,18 +31,14 @@ const App = () => {
         };
         void fetchPatientList();
     }, [dispatch]);
-    // ---
+
     const patientMatch = useMatch("/patients/:id");
-    const getPatient = (
-        patientMatch: PathMatch<"id"> | null
-    ): Patient | null => {
+    const getPatientId = ( patientMatch: PathMatch<"id"> | null ): string | null => {
         if (patientMatch === null) return null;
         const id = patientMatch.params.id;
         if (typeof id === "undefined") return null;
-        return patients[id];
+        return id;
     };
-
-    const selectedPatient = getPatient(patientMatch);
 
     return (
         <div className="App">
@@ -61,7 +57,7 @@ const App = () => {
                 <Divider hidden />
                 <Routes>
                     <Route path="/" element={<PatientListPage />} />
-                    <Route path="/patients/:id" element={ <PatientDetailPage patient={selectedPatient} /> } />
+                    <Route path="/patients/:id" element={ <PatientDetailPage patientId={getPatientId(patientMatch)} /> } />
                 </Routes>
             </Container>
         </div>
