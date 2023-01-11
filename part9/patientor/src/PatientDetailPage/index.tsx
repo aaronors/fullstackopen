@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { useStateValue } from "../state";
+import { useStateValue, setCurrentPatient } from "../state";
 import { apiBaseUrl } from "../constants";
 import { Patient, Gender } from "../types";
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
@@ -15,10 +15,7 @@ const PatientDetailPage = ({patientId}: {patientId: string | null}) => {
                     const { data: currentPatientData } = await axios.get<Patient>(
                         `${apiBaseUrl}/patients/${patientId}`
                     );
-                    dispatch({
-                        type: "SET_CURRENT_PATIENT",
-                        payload: currentPatientData,
-                    });
+                    dispatch(setCurrentPatient(currentPatientData));
                 } catch (e) {
                     console.error(e);
                 }
