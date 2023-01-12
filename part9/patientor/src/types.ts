@@ -63,4 +63,38 @@ export interface Patient {
   entries: Entry[];
 }
 
+// --
 
+interface BaseEntryFormValues {
+    description: unknown;
+    date: unknown;
+    specialist: unknown;
+    diagnosisCodes?: unknown;
+}
+
+interface HealthCheckEntryFormValues extends BaseEntryFormValues {
+    type: "HealthCheck";
+    healthCheckRating: unknown;
+}
+
+interface OccupationalHealthcareEntryFormValues extends BaseEntryFormValues {
+    type: "OccupationalHealthcare";
+    employerName: unknown;
+    sickLeave?: {
+        startDate: unknown;
+        endDate: unknown;
+    };
+}
+
+interface HospitalEntryFormValues extends BaseEntryFormValues {
+    type: "Hospital";
+    discharge: {
+        date: unknown;
+        criteria: unknown;
+    };
+}
+
+export type PatientEntryFormValues =
+    | HospitalEntryFormValues
+    | OccupationalHealthcareEntryFormValues
+    | HealthCheckEntryFormValues;
