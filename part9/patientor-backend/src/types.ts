@@ -9,20 +9,19 @@ export interface Diagnosis {
     name: string;
     latin?: string;
 }
-// --
-
 
 export type Entry =
     | HospitalEntry
     | OccupationalHealthcareEntry
     | HealthCheckEntry;
 
-// // Define special omit for unions
-// type UnionOmit<T, K extends string | number | symbol> = T extends unknown
-//     ? Omit<T, K>
-//     : never;
-// // Define Entry without the 'id' property
-// type EntryWithoutId = UnionOmit<Entry, "id">;
+// Define special omit for unions
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+    ? Omit<T, K>
+    : never;
+
+// Define Entry without the 'id' property
+export type EntryWithoutId = UnionOmit<Entry, "id">;
 
 export enum HealthCheckRating {
     "Healthy" = 0,
@@ -46,7 +45,7 @@ interface HealthCheckEntry extends BaseEntry {
 
 interface OccupationalHealthcareEntry extends BaseEntry {
     type: "OccupationalHealthcare";
-    employerName: string;
+    employerName: string; 
     sickLeave?: {
         startDate: string;
         endDate: string;
@@ -61,8 +60,6 @@ interface HospitalEntry extends BaseEntry {
     };
 }
 
-
-//--
 export interface Patient {
     id: string;
     name: string;
@@ -86,3 +83,37 @@ export type PatientFields = {
     gender: unknown;
     occupation: unknown;
 };
+
+interface BaseEntryFields {
+    description: unknown;
+    date: unknown;
+    specialist: unknown;
+    diagnosisCodes?: unknown;
+}
+
+interface HealthCheckEntryFields extends BaseEntryFields {
+    type: "HealthCheck";
+    healthCheckRating: unknown;
+}
+
+interface OccupationalHealthcareEntryFields extends BaseEntryFields {
+    type: "OccupationalHealthcare";
+    employerName: unknown;
+    sickLeave?: {
+        startDate: unknown;
+        endDate: unknown;
+    };
+}
+
+interface HospitalEntryFields extends BaseEntryFields {
+    type: "Hospital";
+    discharge: {
+        date: unknown;
+        criteria: unknown;
+    };
+}
+
+export type PatientEntryFields =
+    | HospitalEntryFields
+    | OccupationalHealthcareEntryFields
+    | HealthCheckEntryFields;
