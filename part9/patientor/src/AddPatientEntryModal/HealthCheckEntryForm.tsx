@@ -5,11 +5,7 @@ import { useStateValue } from "../state";
 
 import { TextField, SelectField, DiagnosisSelection, HealthRatingOptions } from "./FormField";
 import { HealthCheckEntryFormValues, HealthCheckRating } from "../types";
-
-/*
- * use type Patient, but omit id and entries,
- * because those are irrelevant for new patient object.
- */
+import moment from "moment";
 
 // possibly change to PatientEntryFormValues
 interface Props {
@@ -42,16 +38,16 @@ export const HealthCheckEntryForm = ({ onSubmit, onCancel }: Props) => {
                 const requiredError = "Field is required";
                 const errors: { [field: string]: string } = {};
                 if (!values.description) {
-                    errors.name = requiredError;
+                    errors.description = requiredError;
                 }
                 if (!values.date) {
-                    errors.ssn = requiredError;
+                    errors.date = requiredError;
+                }
+                if(!moment(values.date as string, "MM/DD/YYYY", true).isValid()){
+                    errors.date = "Date must be in format MM/DD/YYYY and be valid";
                 }
                 if (!values.specialist) {
-                    errors.dateOfBirth = requiredError;
-                }
-                if (!values.diagnosisCodes) {
-                    errors.occupation = requiredError;
+                    errors.specialist = requiredError;
                 }
                 if (!values.type) {
                     errors.type = requiredError;
@@ -73,7 +69,7 @@ export const HealthCheckEntryForm = ({ onSubmit, onCancel }: Props) => {
                         />
                         <Field
                             label="Date"
-                            placeholder="MM/DD/YYY"
+                            placeholder="MM/DD/YYYY"
                             name="date"
                             component={TextField}
                         />
