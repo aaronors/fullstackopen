@@ -1,8 +1,8 @@
 import React from "react";
 import axios from "axios";
-import { useStateValue, setCurrentPatient, updatePatientEntries } from "../state";
+import { useStateValue, setCurrentPatient, setDiagnoses, updatePatientEntries } from "../state";
 import { apiBaseUrl } from "../constants";
-import { Patient, Gender, Entry } from "../types";
+import { Patient, Gender, Entry, Diagnosis } from "../types";
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import HealingIcon from '@material-ui/icons/Healing';
@@ -38,6 +38,21 @@ const PatientDetailPage = ({patientId}: {patientId: string | null}) => {
             }
             
         };
+
+        const fetchDiagnoses = async () => {
+            if(Object.keys(diagnoses).length === 0){
+                try {
+                    const { data: diagnoses } = await axios.get<Diagnosis[]>(
+                        `${apiBaseUrl}/diagnoses`
+                    );
+                    dispatch(setDiagnoses(diagnoses));
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        };
+
+        void fetchDiagnoses();
         void fetchCurrentPatient();
     }, [dispatch]);
 
