@@ -72,12 +72,12 @@ interface BaseEntryFormValues {
     diagnosisCodes?: unknown;
 }
 
-interface HealthCheckEntryFormValues extends BaseEntryFormValues {
+export interface HealthCheckEntryFormValues extends BaseEntryFormValues {
     type: "HealthCheck";
     healthCheckRating: unknown;
 }
 
-interface OccupationalHealthcareEntryFormValues extends BaseEntryFormValues {
+export interface OccupationalHealthcareEntryFormValues extends BaseEntryFormValues {
     type: "OccupationalHealthcare";
     employerName: unknown;
     sickLeave?: {
@@ -86,7 +86,7 @@ interface OccupationalHealthcareEntryFormValues extends BaseEntryFormValues {
     };
 }
 
-interface HospitalEntryFormValues extends BaseEntryFormValues {
+export interface HospitalEntryFormValues extends BaseEntryFormValues {
     type: "Hospital";
     discharge: {
         date: unknown;

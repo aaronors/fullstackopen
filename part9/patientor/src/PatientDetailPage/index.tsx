@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { useStateValue, setCurrentPatient } from "../state";
+import { useStateValue, setCurrentPatient, updatePatientEntries } from "../state";
 import { apiBaseUrl } from "../constants";
 import { Patient, Gender, Entry } from "../types";
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
@@ -8,8 +8,21 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import HealingIcon from '@material-ui/icons/Healing';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import WorkIcon from '@material-ui/icons/Work';
+import { Button } from "@material-ui/core";
+import AddPatientEntryModal from "../AddPatientEntryModal";
+import { HealthCheckEntryFormValues } from "../types";
+
 const PatientDetailPage = ({patientId}: {patientId: string | null}) => {
     const [{ currentPatient, diagnoses } , dispatch] = useStateValue();
+    const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+    const [error, setError] = React.useState<string>();
+  
+    const openModal = (): void => setModalOpen(true);
+  
+    const closeModal = (): void => {
+        setModalOpen(false);
+        setError(undefined);
+    };
 
     React.useEffect(() => {
         const fetchCurrentPatient = async () => {
@@ -27,6 +40,27 @@ const PatientDetailPage = ({patientId}: {patientId: string | null}) => {
         };
         void fetchCurrentPatient();
     }, [dispatch]);
+
+    const submitNewPatientEntry = async (values: HealthCheckEntryFormValues) => { // left off here 
+        if(patientId){
+            try {
+                const { data: newPatientEntry } = await axios.post<Entry>(
+                    `${apiBaseUrl}/patients/${patientId}/entries`,
+                    values
+                );
+                dispatch(updatePatientEntries(newPatientEntry));
+                closeModal();
+            } catch (e: unknown) {
+                if (axios.isAxiosError(e)) {
+                    console.error(e?.response?.data || "Unrecognized axios error");
+                    setError(String(e?.response?.data?.error) || "Unrecognized axios error");
+                } else {
+                    console.error("Unknown error", e);
+                    setError("Unknown error");
+                }
+            }
+        }
+    };
 
     const GenderIcon = ({gender}: {gender: Gender}) => {
         switch(gender){
@@ -106,6 +140,15 @@ const PatientDetailPage = ({patientId}: {patientId: string | null}) => {
             <h2>{currentPatient.name}<GenderIcon gender={currentPatient.gender}/></h2>
             <div>ssn: {currentPatient.ssn}</div>
             <div>occupation: {currentPatient.occupation}</div>
+            <AddPatientEntryModal
+                modalOpen={modalOpen}
+                onSubmit={submitNewPatientEntry}
+                error={error}
+                onClose={closeModal}
+            />            
+            <Button variant="contained" onClick={() => openModal()}>
+                Add New Patient Entry
+            </Button>
             {currentPatient.entries.length !== 0 &&
             <>
                 <h4>Entries</h4>
